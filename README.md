@@ -1,7 +1,7 @@
 react-wheelsurf
 -----------------
 
-#### 属性与事件
+## 属性与事件
 
 | 名称 | 类型 | 必须 | 默认 | 描述 |
 |-----|-----|------|-----|-----|
@@ -12,7 +12,7 @@ react-wheelsurf
 |innerStyle|Object|true|-|转盘内盘样式，设置背景|
 |pointerStyle|Object|true|-|转盘指针样式，设置背景|
 
-#### 使用方法
+## 使用方法
 ```
 import Wheelsurf from 'react-wheelsurf'
 
