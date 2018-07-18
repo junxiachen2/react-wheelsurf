@@ -1,0 +1,29 @@
+.cjx-container{
+  position: relative;
+}
+.cjx-outTable{
+  width: 380px;
+  height: 380px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.cjx-innerTable{
+  width: 300px;
+  height: 300px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center center;
+  transition: 6s cubic-bezier(0.25,0.1,0.25,1);
+}
+.cjx-pointer{
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center center;
+}
