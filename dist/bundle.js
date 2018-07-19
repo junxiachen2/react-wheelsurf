@@ -85,11 +85,11 @@ var _propTypes = __webpack_require__(2);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-__webpack_require__(3);
-
-var _wheelsurf = __webpack_require__(8);
+var _wheelsurf = __webpack_require__(3);
 
 var _wheelsurf2 = _interopRequireDefault(_wheelsurf);
+
+__webpack_require__(4);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -120,13 +120,14 @@ var Index = function (_Component) {
 
       var _props = this.props,
           lock = _props.lock,
-          onStart = _props.onStart;
+          onStart = _props.onStart,
+          onFinish = _props.onFinish;
 
       if (lock) return;
+      if (this.ws.isRotating) return;
       var rotate = function rotate(deg, dur) {
         _this2.ws.rotate(deg, dur, function () {
-          // console.log(`转盘旋转结束`)
-          _this2.props.onFinish && _this2.props.onFinish();
+          onFinish && onFinish();
         });
       };
       onStart && onStart(rotate);
@@ -161,20 +162,18 @@ var Index = function (_Component) {
 
 Index.propTypes = {
   lock: _propTypes2.default.bool,
-  // deg: PropTypes.number,
-  // dur: PropTypes.number,
   outStyle: _propTypes2.default.object,
   innerStyle: _propTypes2.default.object,
   pointerStyle: _propTypes2.default.object,
+  onStart: _propTypes2.default.func,
   onFinish: _propTypes2.default.func
 };
 Index.defaultProps = {
   lock: false,
-  // deg: 0,
-  // dur: 6,
   outStyle: {},
   innerStyle: {},
   pointerStyle: {},
+  onStart: null,
   onFinish: null
 };
 
@@ -196,10 +195,54 @@ module.exports = require("prop-types");
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Wheelsurf = function () {
+  function Wheelsurf(selector) {
+    _classCallCheck(this, Wheelsurf);
+
+    this.selector = selector;
+    this.isRotating = false;
+  }
+
+  _createClass(Wheelsurf, [{
+    key: "rotate",
+    value: function rotate(deg, dur, cb) {
+      var _this = this;
+
+      if (this.isRotating) return;
+      this.isRotating = true;
+      this.selector.style.transitionDuration = dur + "s";
+      this.selector.style.transform = "rotate(" + deg + "deg)";
+      setTimeout(function () {
+        _this.isRotating = false;
+        cb && cb();
+      }, dur * 1000);
+    }
+  }]);
+
+  return Wheelsurf;
+}();
+
+exports.default = Wheelsurf;
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(4);
+var content = __webpack_require__(5);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -207,7 +250,7 @@ var transform;
 var options = {"hmr":true}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(6)(content, options);
+var update = __webpack_require__(7)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -224,10 +267,10 @@ if(false) {
 }
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(5)(false);
+exports = module.exports = __webpack_require__(6)(false);
 // imports
 
 
@@ -238,7 +281,7 @@ exports.push([module.i, ".cjx-container{\n  position: relative;\n}\n.cjx-outTabl
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports) {
 
 /*
@@ -320,7 +363,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -376,7 +419,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(7);
+var	fixUrls = __webpack_require__(8);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -692,7 +735,7 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports) {
 
 
@@ -785,50 +828,6 @@ module.exports = function (css) {
 	return fixedCss;
 };
 
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Wheelsurf = function () {
-  function Wheelsurf(selector) {
-    _classCallCheck(this, Wheelsurf);
-
-    this.selector = selector;
-    this.isRotating = false;
-  }
-
-  _createClass(Wheelsurf, [{
-    key: "rotate",
-    value: function rotate(deg, dur, cb) {
-      var _this = this;
-
-      if (this.isRotating) return;
-      this.isRotating = true;
-      this.selector.style.transitionDuration = dur + "s";
-      this.selector.style.transform = "rotate(" + deg + "deg)";
-      setTimeout(function () {
-        _this.isRotating = false;
-        cb && cb();
-      }, dur * 1000);
-    }
-  }]);
-
-  return Wheelsurf;
-}();
-
-exports.default = Wheelsurf;
 
 /***/ })
 /******/ ]);

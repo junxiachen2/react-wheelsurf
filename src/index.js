@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import './index.css';
 import Wheelsurf from './wheelsurf'
+import './index.css';
 
 class Index extends Component {
   constructor(props) {
@@ -11,12 +11,12 @@ class Index extends Component {
     this.ws = new Wheelsurf(this.ws)
   }
   start() {
-    const { lock, onStart } = this.props
+    const { lock, onStart, onFinish } = this.props
     if (lock) return
+    if (this.ws.isRotating) return
     const rotate = (deg, dur) => {
       this.ws.rotate(deg, dur, () => {
-        // console.log(`转盘旋转结束`)
-        this.props.onFinish && this.props.onFinish()
+        onFinish && onFinish()
       })
     }
     onStart && onStart(rotate)
